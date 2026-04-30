@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [project]
-name = "datafarm"
+name = "quantum-foundry"
 version = "0.1.0"
 dependencies = [
   "platformdirs>=4.5.1",
@@ -16,15 +16,15 @@ dependencies = [
 ]
 description = "Schema-aware test data generation tool."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [
-  { name = "Jason Alan Smith", email = "jason.alan.smith@outlook.com"},
-  { name = "Data Farm Community" }]
+  { name = "Jason Alan Smith", email = "jas@qanvilabs.dev"},
+  { name = "Quantum Foundry Community" }]
 
 maintainers = [
-  {name = "Jason Alan Smith", email = "jason.alan.smith@outlook.com"}
+  {name = "Jason Alan Smith", email = "jas@qanvilabs.dev"}
 ]
 
 keywords = [
@@ -39,9 +39,6 @@ classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Testing",
@@ -49,8 +46,8 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/PhoenixAnvil/data-farm-python"
-Issues = "https://github.com/PhoenixAnvil/data-farm-python/issues"
+Repository = "https://github.com/JasonAlanSmith/quantum-foundry"
+Issues = "https://github.com/JasonAlanSmith/quantum-foundry/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -61,15 +58,15 @@ dev = [
 ]
 
 [project.scripts]
-dfarm = "data_farm.l3_frameworks_and_drivers.cli.main:main"
+qf = "quantum_foundry.l3_frameworks_and_drivers.cli.main:main"
 
 [tool.black]
-line-length = 125
-target-version = ["py311"]
+line-length = 72
+target-version = ["py314"]
 
 [tool.ruff]
-line-length = 125
-target-version = "py311"
+line-length = 72
+target-version = "py314"
 
 [tool.ruff.lint]
 # Pick a strong-but-not-insane default set
@@ -96,7 +93,7 @@ max-complexity = 5
 max-args = 10
 max-branches = 10
 max-returns = 10
-max-statements = 15
+max-statements = 10
 
 [tool.pytest.ini_options]
 minversion = "7.0"

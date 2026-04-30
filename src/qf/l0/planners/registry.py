@@ -1,0 +1,65 @@
+from __future__ import annotations
+
+import copy
+from dataclasses import dataclass, field
+
+from qf.l0.planners.boolean_planner import BooleanPlanner
+from qf.l0.planners.datetime_planner import DateTimePlanner
+from qf.l0.planners.int_planner import IntPlanner
+from qf.l0.planners.jsonb_planner import JSONBPlanner
+from qf.l0.planners.numeric_planner import NumericPlanner
+from qf.l0.planners.protocols import ColumnPlanner
+from qf.l0.planners.string_planner import StringPlanner
+from qf.l0.planners.uuid_planner import UUIDPlanner
+from qf.messages.messages import msg
+
+
+@dataclass(slots=True)
+class PlannerRegistry:
+    _by_strategy: dict[str, ColumnPlanner] = field(
+        default_factory=lambda: {}
+    )
+
+    def register(self, planner: ColumnPlanner, *aliases: str) -> None:
+        keys = [planner.strategy, *aliases]
+        for k in keys:
+            key = k.strip().lower()
+            if not key:
+                raise ValueError(msg("err.planner.empty_strategy"))
+            if key in self._by_strategy:
+                raise ValueError(
+                    msg("err.planner.already_registered", planner=key)
+                )
+            self._by_strategy[key] = planner
+
+    def get(self, strategy: str) -> ColumnPlanner | None:
+        key = strategy.strip().lower()
+        if not key:
+            return None
+        return self._by_strategy.get(key)
+
+    @classmethod
+    def empty(cls) -> PlannerRegistry:
+        return cls({})
+
+    @classmethod
+    def default(cls) -> PlannerRegistry:
+        reg = cls.empty()
+
+        reg.register(
+            StringPlanner(),
+            "string_short",
+            "email",
+            "choice_pool",
+            "fk_reference",
+        )  # email uses StringPlanner for now
+        reg.register(IntPlanner(), "int_age", "int_count")
+        reg.register(BooleanPlanner())
+        reg.register(NumericPlanner())
+        reg.register(UUIDPlanner())
+        reg.register(JSONBPlanner(), "json")
+        reg.register(DateTimePlanner())
+        return reg
+
+    def all(self) -> dict[str, ColumnPlanner]:
+        return copy.deepcopy(self._by_strategy)
