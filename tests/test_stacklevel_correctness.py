@@ -3,7 +3,7 @@ from __future__ import annotations
 import io
 import logging
 
-from data_farm.l1_application.observability import untimed
+from qf.l1.observability import untimed
 
 
 # ruff: noqa: PLR0915
@@ -13,7 +13,7 @@ def test_stacklevel_points_to_callsite():
     fmt = "%(filename)s:%(lineno)d:%(message)s"
     handler.setFormatter(logging.Formatter(fmt))
 
-    logger = logging.getLogger("dfarm.stack.test")
+    logger = logging.getLogger("qf.stack.test")
     logger.handlers.clear()
     logger.propagate = False
     logger.setLevel(logging.DEBUG)

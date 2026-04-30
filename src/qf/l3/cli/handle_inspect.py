@@ -1,4 +1,4 @@
-"""Handle the `dfarm inspect` command.
+"""Handle the `qf inspect` command.
 
 This module orchestrates a data source inspection and generation run:
 
@@ -8,14 +8,14 @@ This module orchestrates a data source inspection and generation run:
 - Build generation plans
 - Generate output to stdout or a file
 
-This module coordinates layers; it should not contain low-level inspector or
-planner implementations.
+This module coordinates layers; it should not contain low-level
+inspector or planner implementations.
 """
 
 from __future__ import annotations
 
-from qf.l1_application.context import AppContext
-from qf.l1_application.use_cases.inspect_use_case import run_inspect
+from qf.l1.context import AppContext
+from qf.l1.use_cases.inspect_use_case import run_inspect
 from qf.l3.cli.base import InspectNamespace
 from qf.l3.cli.run_cli_command import to_inspect_command
 

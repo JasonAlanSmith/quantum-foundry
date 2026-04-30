@@ -2,19 +2,34 @@ from __future__ import annotations
 
 import random
 
-from data_farm.l0_domain.model.models import ColumnInspection, PatternSuggestion
-from data_farm.l0_domain.planners.string_planner import StringPlanner
-from data_farm.l0_domain.ports.pattern_source import PatternSource
-from data_farm.l1_application.plan.context import PlanContext
+from qf.l0.model.models import ColumnInspection, PatternSuggestion
+from qf.l0.planners.string_planner import StringPlanner
+from qf.l0.ports.pattern_source import PatternSource
+from qf.l1.plan.context import PlanContext
 
 
-def test_string_planner_is_repeatable_given_seed(col_first_name: ColumnInspection, pattern_source: PatternSource) -> None:
+def test_string_planner_is_repeatable_given_seed(
+    col_first_name: ColumnInspection, pattern_source: PatternSource
+) -> None:
     suggestion = PatternSuggestion(
-        strategy="string", pattern_id="first_names", confidence=1.0, reason="t", suggestor="t", priority=0
+        strategy="string",
+        pattern_id="first_names",
+        confidence=1.0,
+        reason="t",
+        suggestor="t",
+        priority=0,
     )
 
-    ctx1 = PlanContext(rng=random.Random(123), patterns=pattern_source, rows_per_table=3)
-    ctx2 = PlanContext(rng=random.Random(123), patterns=pattern_source, rows_per_table=3)
+    ctx1 = PlanContext(
+        rng=random.Random(123),
+        patterns=pattern_source,
+        rows_per_table=3,
+    )
+    ctx2 = PlanContext(
+        rng=random.Random(123),
+        patterns=pattern_source,
+        rows_per_table=3,
+    )
 
     p = StringPlanner()
 

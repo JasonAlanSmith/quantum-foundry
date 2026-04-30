@@ -8,10 +8,10 @@ from pathlib import Path
 
 import pytest
 
-from data_farm.l0_domain.enums import SqlType
-from data_farm.l0_domain.model.models import ColumnInspection, NormalizedColumnType
-from data_farm.l0_domain.ports.pattern_source import PatternSource
-from data_farm.l1_application.plan.context import PlanContext
+from qf.l0.enums import SqlType
+from qf.l0.model.models import ColumnInspection, NormalizedColumnType
+from qf.l0.ports.pattern_source import PatternSource
+from qf.l1.plan.context import PlanContext
 
 
 @dataclass(frozen=True)
@@ -46,8 +46,12 @@ def patterns_dir(tmp_path: Path) -> Path:
     d = tmp_path / "patterns"
     d.mkdir()
     # .pat files are line-based, comments start with '#'
-    (d / "first_names.pat").write_text("Alice\nBob\n# comment\n\nCharlie\n", encoding="utf-8")
-    (d / "email.pat").write_text("a@example.com\nb@example.com\n", encoding="utf-8")
+    (d / "first_names.pat").write_text(
+        "Alice\nBob\n# comment\n\nCharlie\n", encoding="utf-8"
+    )
+    (d / "email.pat").write_text(
+        "a@example.com\nb@example.com\n", encoding="utf-8"
+    )
     return d
 
 
@@ -63,8 +67,12 @@ def pattern_source() -> PatternSource:
 
 
 @pytest.fixture()
-def plan_context(rng_seeded: random.Random, pattern_source: PatternSource) -> PlanContext:
-    return PlanContext(rng=rng_seeded, patterns=pattern_source, rows_per_table=3)
+def plan_context(
+    rng_seeded: random.Random, pattern_source: PatternSource
+) -> PlanContext:
+    return PlanContext(
+        rng=rng_seeded, patterns=pattern_source, rows_per_table=3
+    )
 
 
 @pytest.fixture()
@@ -105,14 +113,14 @@ pytest_plugins = [
     "tests.helpers.factories",
 ]
 
-LOGGER_NAME = "dfarm"
+LOGGER_NAME = "qf"
 
 
 # ruff: noqa: PLR0915
 @pytest.fixture()
-def dfarm_logger() -> Iterator[logging.Logger]:
+def qf_logger() -> Iterator[logging.Logger]:
     """
-    Yield a clean dfarm logger for unit tests.
+    Yield a clean qf logger for unit tests.
 
     - Clears handlers and disables propagation.
     - Restores original handlers afterwards.
@@ -138,5 +146,6 @@ def dfarm_logger() -> Iterator[logging.Logger]:
 
 @pytest.fixture()
 def tmp_log_base(tmp_path: Path) -> Path:
-    # Base path used by setup_logging(log_file=...) which later derives .csv/.jsonl
-    return tmp_path / "dfarm.log"
+    # Base path used by setup_logging(log_file=...) which later derives
+    # .csv/.jsonl
+    return tmp_path / "qf.log"

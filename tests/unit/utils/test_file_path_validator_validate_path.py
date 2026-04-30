@@ -5,12 +5,14 @@ from pathlib import Path
 
 import pytest
 
-from data_farm.messages.messages import msg
-from data_farm.utils.path import FilePathValidator
+from qf.messages.messages import msg
+from qf.utils.path import FilePathValidator
 
 
 # Happy Path
-def test_validate_path_returns_path_for_existing_file(tmp_path: Path) -> None:
+def test_validate_path_returns_path_for_existing_file(
+    tmp_path: Path,
+) -> None:
     p = tmp_path / "file.txt"
     p.write_text("ok")
 
@@ -64,5 +66,7 @@ def test_validate_path_error_cases(
         validator.validate_path()
 
     # Assert
-    expected = msg(expected_key) if p is None else msg(expected_key, path=p)
+    expected = (
+        msg(expected_key) if p is None else msg(expected_key, path=p)
+    )
     assert expected in str(excinfo.value)

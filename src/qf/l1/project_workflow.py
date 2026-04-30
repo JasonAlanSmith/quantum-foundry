@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from qf.l1_application.commands.project_command import ProjectCommand
-from qf.l1_application.context import AppContext
+from qf.l1.commands.project_command import ProjectCommand
+from qf.l1.context import AppContext
 
 
 def run_project_workflow(

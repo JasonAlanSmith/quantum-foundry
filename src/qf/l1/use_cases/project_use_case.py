@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from qf.l1_application.commands.project_command import ProjectCommand
-from qf.l1_application.context import AppContext
-from qf.l1_application.project_workflow import run_project_workflow
+from qf.l1.commands.project_command import ProjectCommand
+from qf.l1.context import AppContext
+from qf.l1.project_workflow import run_project_workflow
 
 
 def run_project(app_ctx: AppContext, cmd: ProjectCommand) -> int:

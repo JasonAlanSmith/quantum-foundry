@@ -8,9 +8,18 @@ from sqlalchemy.engine.interfaces import ReflectedColumn
 from sqlalchemy.engine.reflection import Inspector as SAInspector
 
 from qf.l0.enums import SqlType
-from qf.l0.model.models import ColumnInspection, NormalizedColumnType, TableInspection
-from qf.l1_application.ports.inspector import Inspector
-from qf.l2.database.database import connect, create_db_engine, disconnect, dispose_engine
+from qf.l0.model.models import (
+    ColumnInspection,
+    NormalizedColumnType,
+    TableInspection,
+)
+from qf.l1.ports.inspector import Inspector
+from qf.l2.database.database import (
+    connect,
+    create_db_engine,
+    disconnect,
+    dispose_engine,
+)
 from qf.messages.messages import msg
 
 
@@ -45,10 +54,13 @@ class DatabaseInspector(Inspector):
             raise RuntimeError(msg(self.err_no_conn))
 
         result = self.conn.execute(text(expression))
-        # Convert RowMapping -> plain dict (keeps SQLAlchemy out of downstream code)
+        # Convert RowMapping -> plain dict (keeps SQLAlchemy out of
+        # downstream code)
         return [dict(row) for row in result.mappings().all()]
 
-    def row_count(self, count_table: str, schema: str | None = None) -> int:
+    def row_count(
+        self, count_table: str, schema: str | None = None
+    ) -> int:
         if self.conn is None:
             raise RuntimeError(msg(self.err_no_conn))
 
@@ -64,12 +76,18 @@ class DatabaseInspector(Inspector):
         stmt = select(func.count()).select_from(t)
         return int(self.conn.execute(stmt).scalar_one())
 
-    def inspect_table(self, table: str, *, schema: str | None = None) -> TableInspection:
+    def inspect_table(
+        self, table: str, *, schema: str | None = None
+    ) -> TableInspection:
         """
         Inspect a table's columns' metadata.
         """
         col_meta = self._get_columns(table, schema=schema)
-        rows = self.row_count(table, schema) if schema else self.row_count(table)
+        rows = (
+            self.row_count(table, schema)
+            if schema
+            else self.row_count(table)
+        )
 
         return TableInspection(
             table=table,
@@ -78,17 +96,25 @@ class DatabaseInspector(Inspector):
             row_count=rows,
         )
 
-    def inspect_many_tables(self, tables: list[str], schema: str | None = None) -> list[TableInspection]:
+    def inspect_many_tables(
+        self, tables: list[str], schema: str | None = None
+    ) -> list[TableInspection]:
         all_tables = self._get_tables(schema=schema)
         for tbl in tables:
             if tbl not in all_tables:
-                raise ValueError(msg("err.dbinspector.tbl_no_exist", table=tbl))
+                raise ValueError(
+                    msg("err.dbinspector.tbl_no_exist", table=tbl)
+                )
 
         return [self.inspect_table(t, schema=schema) for t in tables]
 
-    def inspect_all_tables(self, schema: str | None = None) -> list[TableInspection]:
+    def inspect_all_tables(
+        self, schema: str | None = None
+    ) -> list[TableInspection]:
         all_tables = self._get_tables(schema)
-        return [self.inspect_table(t, schema=schema) for t in all_tables]
+        return [
+            self.inspect_table(t, schema=schema) for t in all_tables
+        ]
 
     def _require_conn(self) -> Connection:
         if self.conn is None:
@@ -106,15 +132,21 @@ class DatabaseInspector(Inspector):
         insp = self._sa_inspector()
         return insp.get_table_names(schema=schema)
 
-    def _get_columns(self, table: str, schema: str | None = None) -> list[ColumnInspection]:
+    def _get_columns(
+        self, table: str, schema: str | None = None
+    ) -> list[ColumnInspection]:
         """
         Returns SQLAlchemy-reflected column info as domain objects.
 
-        Typical keys include: name, type, nullable, default, autoincrement, comment...
+        Typical keys include: name, type, nullable, default,
+        autoincrement, comment...
+
         Exact keys vary slightly by dialect.
         """
         insp = self._sa_inspector()
-        cols: list[ReflectedColumn] = insp.get_columns(table_name=table, schema=schema)
+        cols: list[ReflectedColumn] = insp.get_columns(
+            table_name=table, schema=schema
+        )
 
         # Ensure everything is JSON-ish / plain Python.
         # "type" is often a SQLAlchemy TypeEngine, so stringify it.
@@ -125,8 +157,9 @@ class DatabaseInspector(Inspector):
             type_raw = c.get("type")
             nullable_raw = c.get("nullable")
 
+            m = f"Inspector returned invalid column name: {name_raw!r}"
             if not name_raw:
-                raise ValueError(f"Inspector returned invalid column name: {name_raw!r}")
+                raise ValueError(m)
 
             cleaned.append(
                 ColumnInspection(
@@ -138,12 +171,18 @@ class DatabaseInspector(Inspector):
                     default=c.get("default"),
                     autoincrement=(
                         c.get("autoincrement")
-                        if isinstance(c.get("autoincrement"), bool) or c.get("autoincrement") is None
+                        if (
+                            isinstance(c.get("autoincrement"), bool)
+                            or c.get("autoincrement") is None
+                        )
                         else bool(c.get("autoincrement"))
                     ),
                     comment=(
                         c.get("comment")
-                        if isinstance(c.get("comment"), str) or c.get("comment") is None
+                        if (
+                            isinstance(c.get("comment"), str)
+                            or c.get("comment") is None
+                        )
                         else str(c.get("comment"))
                     ),
                     is_primary_key=False,
@@ -154,13 +193,17 @@ class DatabaseInspector(Inspector):
 
         return cleaned
 
-    def _get_primary_key(self, table: str, schema: str | None = None) -> list[str]:
+    def _get_primary_key(
+        self, table: str, schema: str | None = None
+    ) -> list[str]:
         insp = self._sa_inspector()
         pk = insp.get_pk_constraint(table_name=table, schema=schema)
         cols = pk.get("constrained_columns") or []
         return list(cols)
 
-    def _get_foreign_keys(self, table: str, schema: str | None = None) -> list[dict[str, Any]]:
+    def _get_foreign_keys(
+        self, table: str, schema: str | None = None
+    ) -> list[dict[str, Any]]:
         insp = self._sa_inspector()
         fks = insp.get_foreign_keys(table_name=table, schema=schema)
 
@@ -169,10 +212,14 @@ class DatabaseInspector(Inspector):
             cleaned.append(
                 {
                     "name": fk.get("name"),
-                    "constrained_columns": fk.get("constrained_columns") or [],
+                    "constrained_columns": (
+                        fk.get("constrained_columns") or []
+                    ),
                     "referred_schema": fk.get("referred_schema"),
                     "referred_table": fk.get("referred_table"),
-                    "referred_columns": fk.get("referred_columns") or [],
+                    "referred_columns": (
+                        fk.get("referred_columns") or []
+                    ),
                     "options": fk.get("options") or {},
                 }
             )
@@ -193,7 +240,9 @@ class DatabaseInspector(Inspector):
 
         return self.normalize_params(params, name)
 
-    def normalize_params(self, params: list[int] | None, name: SqlType) -> NormalizedColumnType:
+    def normalize_params(
+        self, params: list[int] | None, name: SqlType
+    ) -> NormalizedColumnType:
         length = None
         num_precision = None
         scale = None
@@ -203,16 +252,23 @@ class DatabaseInspector(Inspector):
 
         if not params:
             return NormalizedColumnType(name, None, None, None, None)
-        if len(params) == 1 and name in (SqlType.STRING, SqlType.FIXED_STRING):
+        if len(params) == 1 and name in (
+            SqlType.STRING,
+            SqlType.FIXED_STRING,
+        ):
             length = params[0]
         elif len(params) == 1 and name in (SqlType.DECIMAL):
             num_precision = params[0]
-        elif len(params) == PRECISION_AND_SCALE and name in (SqlType.DECIMAL):
+        elif len(params) == PRECISION_AND_SCALE and name in (
+            SqlType.DECIMAL
+        ):
             num_precision = params[0]
             scale = params[1]
         elif len(params) == 1 and name == SqlType.DATETIME:
             time_precision = params[0]
-        return NormalizedColumnType(name, length, num_precision, scale, time_precision)
+        return NormalizedColumnType(
+            name, length, num_precision, scale, time_precision
+        )
 
     def _normalize_type_name(self, name: str) -> SqlType | None:
         """TBD"""
@@ -267,10 +323,11 @@ class DatabaseInspector(Inspector):
     def _get_type_params(self, raw_type: str) -> list[int] | None:
         if self._has_params(raw_type):
             params = raw_type.split("(", maxsplit=1)[1]
+            m = f"Cannot parse params {params} for raw type {raw_type}."
             if not params:
                 return None
             if params[-1] != ")":
-                raise ValueError(f"Cannot parse params {params} for raw type {raw_type}.")
+                raise ValueError(m)
             return self._parse_type_params(params)
         return None
 
@@ -290,11 +347,16 @@ class DatabaseInspector(Inspector):
             param_list = parsed_params.split(",", maxsplit=1)
             param_list[0] = param_list[0].strip()
             param_list[1] = param_list[1].strip()
-            if not param_list[0].isdigit() or not param_list[1].isdigit():
+            if (
+                not param_list[0].isdigit()
+                or not param_list[1].isdigit()
+            ):
                 return None
         if parsed_params.isdigit():
             param_list.append(parsed_params)
-        return [int(p) for p in param_list if p.strip() and p.isdigit()] or None
+        return [
+            int(p) for p in param_list if p.strip() and p.isdigit()
+        ] or None
 
     def _has_math_symbols(self, text: str) -> bool:
         math_symbols = ["+", "-", "/", "*"]

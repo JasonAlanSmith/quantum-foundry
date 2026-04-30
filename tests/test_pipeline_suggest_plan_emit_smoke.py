@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-from data_farm.emitters.sql import SqlEmitter
-from data_farm.l0_domain.model.models import ColumnInspection
-from data_farm.l0_domain.planners.registry import PlannerRegistry
-from data_farm.l0_domain.suggestors.defaults import build_default_registry
-from data_farm.l0_domain.suggestors.engine import suggest_for_column
-from data_farm.l1_application.plan.context import PlanContext
+from qf.emitters.sql import SqlEmitter
+from qf.l0.model.models import ColumnInspection
+from qf.l0.planners.registry import PlannerRegistry
+from qf.l0.suggestors.defaults import build_default_registry
+from qf.l0.suggestors.engine import suggest_for_column
+from qf.l1.plan.context import PlanContext
 
 
-def test_pipeline_suggest_plan_emit_for_first_name(col_first_name: ColumnInspection, plan_context: PlanContext) -> None:
+def test_pipeline_suggest_plan_emit_for_first_name(
+    col_first_name: ColumnInspection, plan_context: PlanContext
+) -> None:
     # Suggest
     sreg = build_default_registry()
     suggestion = suggest_for_column(col_first_name, sreg.all())

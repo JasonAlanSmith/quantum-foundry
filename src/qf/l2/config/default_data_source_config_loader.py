@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from qf.l1_application.ports.data_source_config_loader import (
+from qf.l1.ports.data_source_config_loader import (
     DataSourceConfigLoader,
 )
 from qf.utils.config import load_data_source_config

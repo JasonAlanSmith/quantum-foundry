@@ -4,7 +4,7 @@
 
 
 class DataFarmError(Exception):
-    """Base exception for Data Farm."""
+    """Base exception for Quantum Foundry."""
     pass
 
 

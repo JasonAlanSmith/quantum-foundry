@@ -1,9 +1,10 @@
-"""Define the Data Farm CLI surface.
+"""Define the Quantum Foundry CLI surface.
 
-This module constructs the top-level argparse parser and defines the typed
-contracts used by downstream layers (bootstrap/dispatch/handlers).
+This module constructs the top-level argparse parser and defines the
+typed contracts used by downstream layers (bootstrap/dispatch/handlers).
 
-This module does not execute application work; it only defines the CLI shape.
+This module does not execute application work; it only defines the CLI
+shape.
 """
 
 import argparse
@@ -17,13 +18,15 @@ from qf.l3.cli.project_parser import build_project_parser
 # ruff: noqa: PLR0915
 def build_parser() -> argparse.ArgumentParser:
     """
-    Create and return the dfarm CLI parser.
+    Create and return the qf CLI parser.
 
-    :return: Configured argparse parser for the dfarm CLI.
+    :return: Configured argparse parser for the qf CLI.
     :rtype: argparse.ArgumentParser
     """
-    program_name = "dfarm"
-    program_description = "Data Farm - A schema-aware test data generation tool"
+    program_name = "qf"
+    program_description = (
+        "Quantum Foundry - " "A schema-aware test data generation tool"
+    )
 
     parser = argparse.ArgumentParser(
         prog=program_name,

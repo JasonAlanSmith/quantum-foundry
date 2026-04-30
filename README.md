@@ -1,7 +1,7 @@
-# Data Farm (Python Edition)
+# Quantum Foundry
 
-Data Farm is a schema-aware test data generation tool designed for
-engineers, QA professionals, and developers who need structured,
+Quantum Foundry is a schema-aware test data generation tool designed
+for engineers, QA professionals, and developers who need structured,
 reproducible data for relational databases.
 
 It inspects existing schemas, suggests generation strategies, and emits
@@ -11,7 +11,7 @@ SQL scripts using deterministic random generation.
 
 ## Project Status
 
-**Data Farm is in early development.**
+**Quantum Foundry is in early development.**
 
 Version `v0.1.0` is a proof-of-concept release that validates the core workflow:
 
@@ -35,7 +35,7 @@ This release exists to:
 - Enable incremental improvement of planners and generators.
 - Provide a public artifact for feedback and iteration.
 
-Data Farm is not yet intended for production data generation workflows. Future releases will expand planner sophistication, improve realism, and strengthen architectural boundaries.
+Quantum Foundry is not yet intended for production data generation workflows. Future releases will expand planner sophistication, improve realism, and strengthen architectural boundaries.
 
 ## Features
 
@@ -51,7 +51,7 @@ Data Farm is not yet intended for production data generation workflows. Future r
 
 ## Requirements
 
-- Python 3.11+
+- Python 3.14+
 
 ------------------------------------------------------------------------
 
@@ -60,10 +60,10 @@ Data Farm is not yet intended for production data generation workflows. Future r
 Install from PyPI (Coming Soon!):
 
 ``` bash
-pip install datafarm
+pip install qf
 ```
 
-After installation, the CLI command `dfarm` will be available.
+After installation, the CLI command `qf` will be available.
 
 ------------------------------------------------------------------------
 
@@ -71,10 +71,10 @@ After installation, the CLI command `dfarm` will be available.
 
 ### 1️⃣ Initialize a Project
 
-Create a new Data Farm project:
+Create a new Quantum Foundry project:
 
 ``` bash
-dfarm project init my_project
+qf project init my_project
 ```
 
 This creates a project directory containing configuration files.
@@ -97,10 +97,10 @@ Edit the generated configuration file (TOML format) to define:
 Run schema inspection:
 
 ``` bash
-dfarm inspect --config path/to/config.toml
+qf inspect --config path/to/config.toml
 ```
 
-Data Farm will:
+Quantum Foundry will:
 
 - Connect to the configured data source
 - Inspect tables and columns
@@ -112,10 +112,10 @@ Data Farm will:
 ## Example Workflow
 
 ``` bash
-dfarm project init demo_project
+qf project init demo_project
 # edit demo_project/config.toml
 
-dfarm inspect --config demo_project/config.toml
+qf inspect --config demo_project/config.toml
 ```
 
 Output SQL scripts can then be executed against your target database.
@@ -124,7 +124,7 @@ Output SQL scripts can then be executed against your target database.
 
 ## Logging
 
-Data Farm uses structured logging with:
+Quantum Foundry uses structured logging with:
 
 - UTC timestamps
 - Verbosity levels (`-v`)
@@ -133,7 +133,7 @@ Data Farm uses structured logging with:
 Example:
 
 ``` bash
-dfarm inspect --config config.toml -v --log-file logs/
+qf inspect --config config.toml -v --log-file logs/
 ```
 
 If a directory is provided to `--log-file`, a timestamped log file will
@@ -144,16 +144,16 @@ be created automatically.
 ## CLI Overview
 
 ``` bash
-dfarm --help
-dfarm project --help
-dfarm inspect --help
+qf --help
+qf project --help
+qf inspect --help
 ```
 
 ------------------------------------------------------------------------
 
 ## Architecture
 
-Data Farm follows a layered design that separates:
+Quantum Foundry follows a layered design that separates:
 
 - CLI interface
 - Application orchestration
@@ -170,15 +170,14 @@ DDD/Clean Architecture structure.
 Clone the repository:
 
 ``` bash
-git clone https://github.com/PhoenixAnvil/data-farm-python.git
-cd data-farm-python
+git clone 
+cd 
 ```
 
 Create a virtual environment:
 
 ``` bash
 python -m venv .venv
-.venv\Scripts\activate  # Windows
 source .venv/bin/activate  # macOS/Linux
 ```
 

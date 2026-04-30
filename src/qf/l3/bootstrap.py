@@ -1,4 +1,4 @@
-"""Bootstrap Data Farm application state.
+"""Bootstrap Quantum Foundry application state.
 
 This module builds an :class:`~qf.cli.base.AppContext` by
 combining:

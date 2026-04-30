@@ -4,13 +4,19 @@ from pathlib import Path
 
 import pytest
 
-from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source import FilesystemPatternSource
+from qf.l2.patterns.filesystem_pattern_source import (
+    FilesystemPatternSource,
+)
 
 
-def test_pattern_registry_ignores_blank_and_comment_lines(tmp_path: Path) -> None:
+def test_pattern_registry_ignores_blank_and_comment_lines(
+    tmp_path: Path,
+) -> None:
     d = tmp_path / "patterns"
     d.mkdir()
-    (d / "codes.pat").write_text("# header\n\nA\n\n# mid\nB\n", encoding="utf-8")
+    (d / "codes.pat").write_text(
+        "# header\n\nA\n\n# mid\nB\n", encoding="utf-8"
+    )
 
     reg = FilesystemPatternSource(patterns_dir=d)
     choices = reg.get_choices("codes")
@@ -19,7 +25,9 @@ def test_pattern_registry_ignores_blank_and_comment_lines(tmp_path: Path) -> Non
     assert choices == ["A", "B"]
 
 
-def test_pattern_registry_missing_pattern_raises_file_not_found(tmp_path: Path) -> None:
+def test_pattern_registry_missing_pattern_raises_file_not_found(
+    tmp_path: Path,
+) -> None:
     d = tmp_path / "patterns" / "nope.pat"
     pattern = FilesystemPatternSource(patterns_dir=d)
     with pytest.raises(FileNotFoundError) as excinfo:

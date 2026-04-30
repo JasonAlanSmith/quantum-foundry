@@ -4,7 +4,6 @@ import time
 from collections.abc import Mapping
 from contextlib import contextmanager
 from types import TracebackType
-from typing import TypeAlias
 
 log_depth: contextvars.ContextVar[int] = contextvars.ContextVar(
     "log_depth",
@@ -29,7 +28,7 @@ def timed(log: logging.Logger, label: str):
         log.info("%-4s %s (%.3fs)", "<<<", label, elapsed, stacklevel=2)
 
 
-ExcInfo: TypeAlias = (
+type ExcInfo = (
     bool
     | BaseException
     | tuple[type[BaseException], BaseException, TracebackType | None]

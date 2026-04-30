@@ -2,8 +2,8 @@ from collections.abc import Callable
 
 import pytest
 
-from data_farm.l0_domain.enums import SqlType
-from data_farm.l0_domain.model.models import ColumnInspection, NormalizedColumnType
+from qf.l0.enums import SqlType
+from qf.l0.model.models import ColumnInspection, NormalizedColumnType
 
 
 @pytest.fixture
@@ -18,7 +18,9 @@ def make_col() -> Callable[..., ColumnInspection]:
         return ColumnInspection(
             table=table,
             name=name,
-            data_type=NormalizedColumnType(sql_type, length, None, None, None),
+            data_type=NormalizedColumnType(
+                sql_type, length, None, None, None
+            ),
             nullable=True,
             is_primary_key=False,
             is_foreign_key=False,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Protocol
 
-from qf.l1_application.ports.inspector import Inspector
+from qf.l1.ports.inspector import Inspector
 
 
 class InspectorFactory(Protocol):

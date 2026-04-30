@@ -5,17 +5,25 @@ import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from data_farm.l2_interface_adapters.logging.logging import JsonlFormatter
+from qf.l2.logging.logging import JsonlFormatter
 
 
 # ruff: noqa: PLR0915
-def test_jsonl_formatter_emits_one_object_per_line(tmp_path: Path) -> None:
+def test_jsonl_formatter_emits_one_object_per_line(
+    tmp_path: Path,
+) -> None:
     path = tmp_path / "x.jsonl"
-    h = RotatingFileHandler(str(path), maxBytes=10_000, backupCount=1, delay=True, encoding="utf-8")
+    h = RotatingFileHandler(
+        str(path),
+        maxBytes=10_000,
+        backupCount=1,
+        delay=True,
+        encoding="utf-8",
+    )
     h.setLevel(logging.INFO)
     h.setFormatter(JsonlFormatter())
 
-    logger = logging.getLogger("dfarm.jsonl.test")
+    logger = logging.getLogger("qf.jsonl.test")
     logger.handlers.clear()
     logger.propagate = False
     logger.setLevel(logging.DEBUG)
@@ -29,4 +37,4 @@ def test_jsonl_formatter_emits_one_object_per_line(tmp_path: Path) -> None:
     assert len(lines) == 1
     obj = json.loads(lines[0])
     assert obj["message"] == "Hello JSONL"
-    assert obj["logger"] == "dfarm.jsonl.test"
+    assert obj["logger"] == "qf.jsonl.test"

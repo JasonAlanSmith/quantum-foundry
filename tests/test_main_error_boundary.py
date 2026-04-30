@@ -5,7 +5,7 @@ from typing import Any
 
 from pytest import MonkeyPatch
 
-import data_farm.l3_frameworks_and_drivers.cli.main as df_main
+import qf.l3.cli.main as df_main
 
 
 @dataclass
@@ -36,7 +36,9 @@ def test_main_returns_int_on_success(monkeypatch: MonkeyPatch) -> None:
     assert df_main.main([]) == 0
 
 
-def test_main_unhandled_exception_returns_nonzero(monkeypatch: MonkeyPatch) -> None:
+def test_main_unhandled_exception_returns_nonzero(
+    monkeypatch: MonkeyPatch,
+) -> None:
     monkeypatch.setattr(df_main, "build_parser", _fake_build_parser)
     monkeypatch.setattr(df_main, "dispatch", _boom_dispatch)
     assert df_main.main([]) != 0

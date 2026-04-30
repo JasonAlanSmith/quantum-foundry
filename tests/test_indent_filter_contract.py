@@ -9,7 +9,7 @@ def test_indent_filter_injects_attributes():
             record.indent_level = 3
             return True
 
-    logger = logging.getLogger("dfarm.filter.test")
+    logger = logging.getLogger("qf.filter.test")
     logger.handlers.clear()
     logger.propagate = False
     logger.setLevel(logging.DEBUG)

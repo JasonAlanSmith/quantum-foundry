@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from qf.l1_application.ports.pattern_source import PatternSource
+from qf.l1.ports.pattern_source import PatternSource
 
 
 @dataclass(slots=True)

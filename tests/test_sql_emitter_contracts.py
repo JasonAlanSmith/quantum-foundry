@@ -1,15 +1,19 @@
 from __future__ import annotations
 
-from data_farm.emitters.sql import SqlEmitter
-from data_farm.l0_domain.enums import SqlType
-from data_farm.l0_domain.model.models import ColumnEmitDefinition
+from qf.emitters.sql import SqlEmitter
+from qf.l0.enums import SqlType
+from qf.l0.model.models import ColumnEmitDefinition
 
 
 def test_sql_emitter_renders_insert_statement() -> None:
     e = SqlEmitter()
     cols = [
-        ColumnEmitDefinition(name="first_name", data_type=SqlType.STRING, value="Alice"),
-        ColumnEmitDefinition(name="code", data_type=SqlType.STRING, value="X1"),
+        ColumnEmitDefinition(
+            name="first_name", data_type=SqlType.STRING, value="Alice"
+        ),
+        ColumnEmitDefinition(
+            name="code", data_type=SqlType.STRING, value="X1"
+        ),
     ]
     sql = e.emit("t1", cols)
     sql_str = next(iter(sql))
@@ -21,7 +25,11 @@ def test_sql_emitter_renders_insert_statement() -> None:
 
 def test_sql_emitter_escapes_single_quotes() -> None:
     e = SqlEmitter()
-    cols = [ColumnEmitDefinition(name="note", data_type=SqlType.STRING, value="Bob's bike")]
+    cols = [
+        ColumnEmitDefinition(
+            name="note", data_type=SqlType.STRING, value="Bob's bike"
+        )
+    ]
     sql = e.emit("t1", cols)
     sql_str = next(iter(sql))
     # standard SQL escape is doubling quotes

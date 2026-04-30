@@ -77,7 +77,7 @@ class NormalizedColumnType:
 
 @dataclass(frozen=True)
 class AppConfig:
-    """Data Farm Global Configuration."""
+    """Quantum Foundry Global Configuration."""
 
     config_root: str
     data_root: str

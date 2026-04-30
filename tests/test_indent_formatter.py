@@ -3,7 +3,7 @@ from __future__ import annotations
 import io
 import logging
 
-from data_farm.l2_interface_adapters.logging.logging import IndentFormatter, log_depth
+from qf.l2.logging.logging import IndentFormatter, log_depth
 
 
 # ruff: noqa: PLR0915
@@ -12,7 +12,7 @@ def test_indent_formatter_prefixes_message_only() -> None:
     h = logging.StreamHandler(stream)
     h.setFormatter(IndentFormatter("%(levelname)s %(message)s"))
 
-    logger = logging.getLogger("dfarm.indent.test")
+    logger = logging.getLogger("qf.indent.test")
     logger.handlers.clear()
     logger.propagate = False
     logger.setLevel(logging.DEBUG)

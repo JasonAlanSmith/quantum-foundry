@@ -58,7 +58,7 @@ dev = [
 ]
 
 [project.scripts]
-qf = "quantum_foundry.l3_frameworks_and_drivers.cli.main:main"
+qf = "qf.l3.cli.main:main"
 
 [tool.black]
 line-length = 72
@@ -93,7 +93,7 @@ max-complexity = 5
 max-args = 10
 max-branches = 10
 max-returns = 10
-max-statements = 10
+max-statements = 15
 
 [tool.pytest.ini_options]
 minversion = "7.0"

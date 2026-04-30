@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from qf.l1_application.commands.project_command import ProjectCommand
+from qf.l1.commands.project_command import ProjectCommand
 from qf.l3.cli.base import ProjectNamespace
 
 

@@ -2,17 +2,24 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source import FilesystemPatternSource
+from qf.l2.patterns.filesystem_pattern_source import (
+    FilesystemPatternSource,
+)
 
 
-def test_pattern_registry_get_choices_loads_and_normalizes(patterns_dir: Path) -> None:
+def test_pattern_registry_get_choices_loads_and_normalizes(
+    patterns_dir: Path,
+) -> None:
     reg = FilesystemPatternSource(patterns_dir=patterns_dir)
 
-    choices = reg.get_choices("First Names")  # exercises normalization -> first_names.pat
+    # exercises normalization -> first_names.pat
+    choices = reg.get_choices("First Names")
     assert choices == ["Alice", "Bob", "Charlie"]
 
 
-def test_pattern_registry_caches_loaded_patterns(patterns_dir: Path) -> None:
+def test_pattern_registry_caches_loaded_patterns(
+    patterns_dir: Path,
+) -> None:
     reg = FilesystemPatternSource(patterns_dir=patterns_dir)
 
     p1 = reg.get_choices("first_names")

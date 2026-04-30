@@ -2,8 +2,8 @@ from collections.abc import Callable
 
 import pytest
 
-from data_farm.l0_domain.model.models import ColumnInspection
-from data_farm.l0_domain.suggestors.builtins import EmailSuggestor
+from qf.l0.model.models import ColumnInspection
+from qf.l0.suggestors.builtins import EmailSuggestor
 
 MakeCol = Callable[..., ColumnInspection]
 
@@ -13,7 +13,9 @@ MakeCol = Callable[..., ColumnInspection]
     ["email", "email1", "1email"],
     ids=["match-exact", "match-before", "match-after"],
 )
-def test_email_suggestor_returns_pattern_suggestion(make_col: MakeCol, name: str) -> None:
+def test_email_suggestor_returns_pattern_suggestion(
+    make_col: MakeCol, name: str
+) -> None:
     # Arrange
     ci = make_col(name=name)
     CONFIDENCE = 0.9
