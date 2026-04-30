@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from qf.l1_application.ports.inspector import Inspector
+from qf.l1.ports.inspector import Inspector
 from qf.l2.inspection.database_inspector import DatabaseInspector
 
 INSPECTOR_REGISTRY: dict[str, type[Inspector]] = {
@@ -16,6 +16,8 @@ def create_inspector(config: dict[str, Any]) -> Inspector:
     try:
         inspector_cls = INSPECTOR_REGISTRY[source_type]
     except KeyError as err:
-        raise ValueError(f"Unsupported source type: {source_type}.") from err
+        raise ValueError(
+            f"Unsupported source type: {source_type}."
+        ) from err
 
     return inspector_cls(config)

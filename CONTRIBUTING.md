@@ -1,7 +1,7 @@
-# Contributing to Data Farm (Python Edition)
+# Contributing to Quantum Foundry
 
-Thanks for your interest in contributing to **Data Farm**! 🎉  
-Data Farm is a schema-aware test-data generation tool for databases, CSV, JSON, and other structured sources.
+Thanks for your interest in contributing to **Quantum Foundry**! 🎉  
+Quantum Foundry is a schema-aware test-data generation tool for databases, CSV, JSON, and other structured sources.
 
 This guide covers how to:
 
@@ -14,9 +14,9 @@ This guide covers how to:
 
 ## Quick links
 
-- Repo: [GitHub](https://github.com/PhoenixAnvil/data-farm-python)
-- Issues: [GitHub Issues](https://github.com/PhoenixAnvil/data-farm-python/issues)
-- Project Board: [GitHub Project](https://github.com/users/PhoenixAnvil/projects/1/views/1)
+- Repo: [GitHub]()
+- Issues: [GitHub Issues]()
+- Project Board: [GitHub Project]()
 
 ---
 
@@ -60,7 +60,7 @@ Please include:
 - Minimal reproduction steps
 - Relevant logs / stack traces
 
-### Feature requests
+### Feature requestsnn
 
 Please include:
 
@@ -81,17 +81,14 @@ Please include:
 ### Clone
 
 ```bash
-git clone https://github.com/PhoenixAnvil/data-farm-python.git
-cd data-farm-python
+git clone 
+cd 
 ```
 
 ### Create a virtual environment
 
 ```bash
 python -m venv .venv
-
-# Windows PowerShell
-. .\.venv\Scripts\Activate.ps1
 
 # macOS/Linux
 source .venv/bin/activate
@@ -147,7 +144,7 @@ pytest
 After an editable install, you can run:
 
 ```bash
-dfarm --help
+qf --help
 ```
 
 If you add a new command/flag, please include a minimal example in `examples/` or docs.
@@ -198,9 +195,9 @@ In the PR description, include:
 
 ---
 
-## Design expectations (Data Farm style)
+## Design expectations (Quantum Foundry style)
 
-Data Farm aims to stay:
+Quantum Foundry aims to stay:
 
 - **Deterministic** (seeded/repeatable output where applicable)
 - **CLI-friendly** (clear messages, helpful errors, good exit codes)

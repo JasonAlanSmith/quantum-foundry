@@ -9,7 +9,7 @@ from qf.l0.model.models import (
     ColumnInspection,  # adjust import
     PatternSuggestion,  # adjust import
 )
-from qf.l1_application.plan.context import PlanContext
+from qf.l1.plan.context import PlanContext
 
 
 class ColumnPlanner(Protocol):

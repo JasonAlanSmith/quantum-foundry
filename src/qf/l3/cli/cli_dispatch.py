@@ -1,7 +1,7 @@
 """Dispatch application work based on parsed CLI arguments.
 
-This module receives an argparse namespace, boots the application context, and
-dispatches to the appropriate handler.
+This module receives an argparse namespace, boots the application
+context, and dispatches to the appropriate handler.
 
 Responsibilities:
 - Build :class:`~qf.cli.base.AppContext` via bootstrap
@@ -18,7 +18,7 @@ from argparse import ArgumentParser, Namespace
 from qf.l3.bootstrap import boot_app_from_ns
 from qf.l3.cli.run_cli_command import run_cli_command
 
-logger = logging.getLogger("dfarm")
+logger = logging.getLogger("qf")
 
 
 def dispatch(parser: ArgumentParser, ns: Namespace) -> int:

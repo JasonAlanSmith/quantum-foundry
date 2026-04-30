@@ -10,16 +10,23 @@ from typing import TypeVar, overload
 T = TypeVar("T")
 
 
-def random_int(rng: random.Random, min_value: int, max_value: int) -> int:
+def random_int(
+    rng: random.Random, min_value: int, max_value: int
+) -> int:
     return rng.randint(min_value, max_value)
 
 
-def random_choice(rng: random.Random, collection: Sequence[T] | Set[T]) -> T:
-    if isinstance(collection, set):
-        # Convert because sets aren't indexable.
-        return rng.choice(tuple(collection))
+def random_choice[T](
+    rng: random.Random, collection: Sequence[T] | Set[T]
+) -> T:
+    choices: Sequence[T]
 
-    return rng.choice(collection)
+    if isinstance(collection, Sequence):
+        choices = collection
+    else:
+        choices = tuple(collection)
+
+    return rng.choice(choices)
 
 
 @overload

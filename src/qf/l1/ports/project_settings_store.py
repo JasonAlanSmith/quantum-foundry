@@ -5,4 +5,6 @@ from typing import Protocol
 
 
 class ProjectSettingsStore(Protocol):
-    def set_projects_root(self, config_path: Path, projects_root: str) -> None: ...
+    def set_projects_root(
+        self, config_path: Path, projects_root: str
+    ) -> None: ...

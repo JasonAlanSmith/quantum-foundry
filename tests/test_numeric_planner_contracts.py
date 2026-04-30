@@ -1,9 +1,13 @@
 from __future__ import annotations
 
-from data_farm.l0_domain.enums import SqlType
-from data_farm.l0_domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.l0_domain.planners.numeric_planner import NumericPlanner
-from data_farm.l1_application.plan.context import PlanContext
+from qf.l0.enums import SqlType
+from qf.l0.model.models import (
+    ColumnInspection,
+    NormalizedColumnType,
+    PatternSuggestion,
+)
+from qf.l0.planners.numeric_planner import NumericPlanner
+from qf.l1.plan.context import PlanContext
 
 
 def test_numeric_planner_emits_value(plan_context: PlanContext) -> None:
@@ -19,7 +23,14 @@ def test_numeric_planner_emits_value(plan_context: PlanContext) -> None:
         ),
         nullable=False,
     )
-    sug = PatternSuggestion(strategy="numeric", pattern_id=None, confidence=1.0, reason="t", suggestor="t", priority=0)
+    sug = PatternSuggestion(
+        strategy="numeric",
+        pattern_id=None,
+        confidence=1.0,
+        reason="t",
+        suggestor="t",
+        priority=0,
+    )
     ed = NumericPlanner().plan(col, sug, plan_context)
     assert ed is not None
     assert ed.data_type == SqlType.DECIMAL

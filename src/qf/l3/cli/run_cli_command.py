@@ -5,14 +5,14 @@ from argparse import Namespace
 from dataclasses import dataclass
 from typing import cast
 
-from qf.l1_application.context import AppContext
-from qf.l1_application.use_cases.inspect_use_case import run_inspect
-from qf.l1_application.use_cases.project_use_case import run_project
+from qf.l1.context import AppContext
+from qf.l1.use_cases.inspect_use_case import run_inspect
+from qf.l1.use_cases.project_use_case import run_project
 from qf.l3.cli.base import InspectNamespace, ProjectNamespace
 from qf.l3.cli.mappers.inspect_mapper import to_inspect_command
 from qf.l3.cli.mappers.project_mapper import to_project_command
 
-logger = logging.getLogger("dfarm")
+logger = logging.getLogger("qf")
 
 
 @dataclass(slots=True)

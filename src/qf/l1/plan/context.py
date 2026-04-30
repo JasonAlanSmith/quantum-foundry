@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from qf.l1_application.ports.pattern_source import PatternSource
+from qf.l1.ports.pattern_source import PatternSource
 
 
 @dataclass(slots=True)

@@ -4,12 +4,16 @@ import logging
 from contextlib import suppress
 from pathlib import Path
 
-from data_farm.l1_application.observability import log_depth, timed, untimed
-from data_farm.l2_interface_adapters.logging.logging_config import LOGGER_NAME, setup_logging
+from qf.l1.observability import log_depth, timed, untimed
+from qf.l2.logging.logging_config import LOGGER_NAME, setup_logging
 
 
-def test_timed_increments_and_restores_depth(tmp_path: Path, dfarm_logger: logging.Logger) -> None:
-    setup_logging(verbosity=2, log_file=str(tmp_path / "dfarm.log"), force=True)
+def test_timed_increments_and_restores_depth(
+    tmp_path: Path, qf_logger: logging.Logger
+) -> None:
+    setup_logging(
+        verbosity=2, log_file=str(tmp_path / "qf.log"), force=True
+    )
     logger = logging.getLogger(LOGGER_NAME)
     LOG_DEPTH = 2
     assert log_depth.get() == 0
@@ -21,8 +25,10 @@ def test_timed_increments_and_restores_depth(tmp_path: Path, dfarm_logger: loggi
     assert log_depth.get() == 0
 
 
-def test_untimed_writes_message(tmp_path: Path, dfarm_logger: logging.Logger) -> None:
-    base = tmp_path / "dfarm.log"
+def test_untimed_writes_message(
+    tmp_path: Path, qf_logger: logging.Logger
+) -> None:
+    base = tmp_path / "qf.log"
     setup_logging(verbosity=1, log_file=str(base), force=True)
     logger = logging.getLogger(LOGGER_NAME)
 

@@ -10,16 +10,22 @@ from platformdirs import user_config_dir, user_data_dir
 from qf.messages.messages import msg
 from qf.utils.path import FilePathValidator
 
-qf_config_root = str(Path(user_config_dir("datafarm", appauthor=False)))
-qf_data_root = str(Path(user_data_dir("datafarm", appauthor=False)))
+qf_config_root = str(Path(user_config_dir("qf", appauthor=False)))
+qf_data_root = str(Path(user_data_dir("qf", appauthor=False)))
 
-qf_config_path = str(Path(qf_config_root) / "datafarm.toml")
-qf_config: dict[str, Any] = {"project": {"projects_root": str(Path(qf_data_root) / "projects")}}
+qf_config_path = str(Path(qf_config_root) / "qf.toml")
+qf_config: dict[str, Any] = {
+    "project": {"projects_root": str(Path(qf_data_root) / "projects")}
+}
 
-qf_logs_dir = str(Path(user_data_dir("datafarm", appauthor=False)) / "logs")
+qf_logs_dir = str(
+    Path(user_data_dir("qf", appauthor=False)) / "logs"
+)
 
 
-def load_data_source_config(config_path: Path | None = None) -> list[dict[str, Any]]:
+def load_data_source_config(
+    config_path: Path | None = None,
+) -> list[dict[str, Any]]:
     """TBD"""
     path = FilePathValidator(config_path).validate_path()
     with path.open("rb") as f:
@@ -60,7 +66,7 @@ def load_qf_config(config_path: Path) -> dict[str, Any]:
 
 
 def validate_qf_config(config: dict[str, Any]) -> None:
-    """Validate a given data farm config file is valid."""
+    """Validate a given qf config file is valid."""
     if not config:
         raise ValueError(msg("err.utils.config.val_data_src_cfg"))
 
@@ -78,7 +84,9 @@ def make_qf_data_dir(path: str) -> None:
         p.mkdir(parents=True, exist_ok=False)
 
     if not p.exists():
-        raise ValueError(msg("err.utils.config.dir_create_fail", path=p))
+        raise ValueError(
+            msg("err.utils.config.dir_create_fail", path=p)
+        )
 
 
 def make_qf_config_dir(path: str) -> None:
@@ -87,7 +95,9 @@ def make_qf_config_dir(path: str) -> None:
         p.mkdir(parents=True, exist_ok=False)
 
     if not p.exists():
-        raise ValueError(msg("err.utils.config.dir_create_fail", path=p))
+        raise ValueError(
+            msg("err.utils.config.dir_create_fail", path=p)
+        )
 
 
 def config_dir_exists(path: str) -> bool:

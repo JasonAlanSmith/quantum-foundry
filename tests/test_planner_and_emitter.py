@@ -1,13 +1,19 @@
 from __future__ import annotations
 
-from data_farm.emitters.sql import SqlEmitter
-from data_farm.l0_domain.enums import SqlType
-from data_farm.l0_domain.model.models import ColumnEmitDefinition, ColumnInspection, PatternSuggestion
-from data_farm.l0_domain.planners.string_planner import StringPlanner
-from data_farm.l1_application.plan.context import PlanContext
+from qf.emitters.sql import SqlEmitter
+from qf.l0.enums import SqlType
+from qf.l0.model.models import (
+    ColumnEmitDefinition,
+    ColumnInspection,
+    PatternSuggestion,
+)
+from qf.l0.planners.string_planner import StringPlanner
+from qf.l1.plan.context import PlanContext
 
 
-def test_string_planner_uses_pattern_id_when_present(plan_context: PlanContext, col_first_name: ColumnInspection) -> None:
+def test_string_planner_uses_pattern_id_when_present(
+    plan_context: PlanContext, col_first_name: ColumnInspection
+) -> None:
     planner = StringPlanner()
 
     suggestion = PatternSuggestion(
@@ -30,8 +36,16 @@ def test_sql_emitter_quotes_string_values() -> None:
     for insert in e.emit(
         "t1",
         [
-            ColumnEmitDefinition(name="first_name", data_type=SqlType.STRING, value="Alice"),
-            ColumnEmitDefinition(name="age", data_type=SqlType.INTEGER, value="42"),
+            ColumnEmitDefinition(
+                name="first_name",
+                data_type=SqlType.STRING,
+                value="Alice",
+            ),
+            ColumnEmitDefinition(
+                name="age", data_type=SqlType.INTEGER, value="42"
+            ),
         ],
     ):
-        assert insert == "INSERT INTO t1 (first_name, age) VALUES ('Alice', 42);"
+        assert insert == (
+            "INSERT INTO t1 (first_name, age) VALUES ('Alice', 42);"
+        )

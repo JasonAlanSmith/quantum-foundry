@@ -1,14 +1,16 @@
-"""Configure Data Farm logging.
+"""Configure Quantum Foundry logging.
 
 Design goals:
 
-- Console logs always go to stderr (stdout is reserved for generated data).
+- Console logs always go to stderr (stdout is reserved for generated
+  data).
 - File logging is enabled only when explicitly requested.
-- Logs are easy to scan: start/complete markers, elapsed time, and indentation
+- Logs are easy to scan: start/complete markers, elapsed time, and
+  indentation
   to reflect call hierarchy.
 
-This module defines logging conventions and handler setup. It does not perform
-application logic.
+This module defines logging conventions and handler setup. It does not
+perform application logic.
 """
 
 from __future__ import annotations
@@ -23,12 +25,21 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any, TextIO
 
-from qf.l2.logging.logging import IndentFormatter, JsonlFormatter, log_depth
+from qf.l2.logging.logging import (
+    IndentFormatter,
+    JsonlFormatter,
+    log_depth,
+)
 
-LOGGER_NAME = "dfarm"
+LOGGER_NAME = "qf"
 
 
-def setup_logging(verbosity: int = 0, log_file: str | None = None, *, force: bool = False) -> None:
+def setup_logging(
+    verbosity: int = 0,
+    log_file: str | None = None,
+    *,
+    force: bool = False,
+) -> None:
     """
     Configure application logging.
 
@@ -38,7 +49,7 @@ def setup_logging(verbosity: int = 0, log_file: str | None = None, *, force: boo
         2+ = DEBUG
 
     force:
-        If True, replace existing handlers on the dfarm logger.
+        If True, replace existing handlers on the qf logger.
         Useful for dev reruns; leave False for normal operation/testing.
     """
     level = set_level(verbosity)
@@ -56,7 +67,9 @@ def setup_logging(verbosity: int = 0, log_file: str | None = None, *, force: boo
         # already configured; don't duplicate handlers
         return
 
-    console_formatter = IndentFormatter("%(asctime)s | %(levelname)-8s | %(message)s")
+    console_formatter = IndentFormatter(
+        "%(asctime)s | %(levelname)-8s | %(message)s"
+    )
 
     logger.addHandler(setup_console_logger(level, console_formatter))
 
@@ -66,15 +79,29 @@ def setup_logging(verbosity: int = 0, log_file: str | None = None, *, force: boo
         logger.addHandler(setup_json_logger(log_file, file_level))
 
 
-def setup_console_logger(level: int, formatter: logging.Formatter) -> logging.StreamHandler[TextIO]:
-    console_handler: logging.StreamHandler[TextIO] = logging.StreamHandler(sys.stderr)
+def setup_console_logger(
+    level: int, formatter: logging.Formatter
+) -> logging.StreamHandler[TextIO]:
+    console_handler: logging.StreamHandler[TextIO] = (
+        logging.StreamHandler(sys.stderr)
+    )
     console_handler.setLevel(level)
     console_handler.setFormatter(formatter)
     return console_handler
 
 
-def setup_csv_logger(log_file: str, level: int = logging.DEBUG) -> logging.FileHandler:
-    fields = ["timestamp", "level", "indent_level", "module", "func", "line", "message"]
+def setup_csv_logger(
+    log_file: str, level: int = logging.DEBUG
+) -> logging.FileHandler:
+    fields = [
+        "timestamp",
+        "level",
+        "indent_level",
+        "module",
+        "func",
+        "line",
+        "message",
+    ]
 
     csv_path = Path(log_file).with_suffix(".csv")
 
@@ -112,11 +139,14 @@ class CsvFormatter(logging.Formatter):
         return self._fieldnames
 
     def format(self, record: logging.LogRecord) -> str:
-        # Make sure record.message exists (logging sets this via getMessage)
+        # Make sure record.message exists (logging sets this via
+        # getMessage)
         record.message = record.getMessage()
 
         row: dict[str, Any] = {
-            "timestamp": datetime.fromtimestamp(record.created, tz=UTC).isoformat(),
+            "timestamp": datetime.fromtimestamp(
+                record.created, tz=UTC
+            ).isoformat(),
             "level": record.levelname,
             "indent_level": log_depth.get(),
             "module": record.module,
@@ -162,7 +192,9 @@ class HeaderRotatingFileHandler(RotatingFileHandler):
             # base opened the stream immediately; ensure header now
             self._ensure_header_on_stream(self.stream)
 
-    def _ensure_header_on_stream(self, stream: TextIOWrapper[Any]) -> None:
+    def _ensure_header_on_stream(
+        self, stream: TextIOWrapper[Any]
+    ) -> None:
         try:
             if stream.tell() == 0:
                 stream.write(self._header)
@@ -179,7 +211,8 @@ class HeaderRotatingFileHandler(RotatingFileHandler):
 
     def doRollover(self) -> None:
         super().doRollover()
-        # If stream is still open after rollover, ensure header for the new file.
+        # If stream is still open after rollover, ensure header for the
+        # new file.
         # If delay=True and it closes, _open() will handle header later.
         stream = getattr(self, "stream", None)
         if stream is not None:
@@ -187,14 +220,22 @@ class HeaderRotatingFileHandler(RotatingFileHandler):
 
 
 def setup_csv_logging(log_path: Path) -> logging.Logger:
-    logger = logging.getLogger("dfarm")
+    logger = logging.getLogger("qf")
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
     # Avoid duplicate handlers if setup called multiple times
     logger.handlers.clear()
 
-    fields = ["timestamp", "level", "indent_level", "module", "func", "line", "message"]
+    fields = [
+        "timestamp",
+        "level",
+        "indent_level",
+        "module",
+        "func",
+        "line",
+        "message",
+    ]
     header = ",".join(fields)
 
     csv_path = Path(log_path).with_suffix(".csv")
@@ -213,7 +254,9 @@ def setup_csv_logging(log_path: Path) -> logging.Logger:
     return logger
 
 
-def setup_json_logger(log_file: str, level: int = logging.INFO) -> logging.FileHandler:
+def setup_json_logger(
+    log_file: str, level: int = logging.INFO
+) -> logging.FileHandler:
     """
     JSONL file logger. Writes one JSON object per line.
     Uses RotatingFileHandler for rollover.

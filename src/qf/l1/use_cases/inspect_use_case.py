@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from qf.l1_application.commands.inspect_command import InspectCommand
-from qf.l1_application.context import AppContext
-from qf.l1_application.inspect_workflow import (
+from qf.l1.commands.inspect_command import InspectCommand
+from qf.l1.context import AppContext
+from qf.l1.inspect_workflow import (
     create_inspection_context,
     generate_data,
     get_generation_plans,
@@ -14,7 +14,9 @@ from qf.l1_application.inspect_workflow import (
 
 def run_inspect(app_ctx: AppContext, cmd: InspectCommand) -> int:
     insp_ctx = create_inspection_context(app_ctx, cmd)
-    insp_res = inspect(app_ctx, insp_ctx.data_source_config, insp_ctx.schema)
+    insp_res = inspect(
+        app_ctx, insp_ctx.data_source_config, insp_ctx.schema
+    )
 
     gen_plans = get_generation_plans(insp_ctx, insp_res)
 

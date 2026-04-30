@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from qf.l1_application.commands.inspect_command import InspectCommand
+from qf.l1.commands.inspect_command import InspectCommand
 from qf.l3.cli.base import InspectNamespace
 
 

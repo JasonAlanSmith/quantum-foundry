@@ -5,11 +5,11 @@ import logging
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 
-from qf.l1_application.observability import log_depth
+from qf.l1.observability import log_depth
 
 
 def generate_log_file_name() -> str:
-    """Generate a name for the Data Farm log file."""
+    """Generate a name for the Quantum Foundry log file."""
     return f"qf_{datetime.now(UTC):%Y%m%d_%H%M%S}.log"
 
 
@@ -26,12 +26,17 @@ class IndentFormatter(logging.Formatter):
         finally:
             record.msg = original_msg
 
-    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:
+    def formatTime(
+        self, record: logging.LogRecord, datefmt: str | None = None
+    ) -> str:
         if datefmt is not None:
             return super().formatTime(record, datefmt)
 
         dt = datetime.fromtimestamp(record.created, tz=UTC)
-        return dt.strftime("%Y-%m-%d %H:%M:%S.") + f"{int(record.msecs):03d}"
+        return (
+            dt.strftime("%Y-%m-%d %H:%M:%S.")
+            + f"{int(record.msecs):03d}"
+        )
 
 
 @dataclass(frozen=True)
@@ -48,7 +53,9 @@ class JsonLogRow:
 
 
 class JsonlFormatter(logging.Formatter):
-    """Line-delimited JSON formatter (JSONL). One log record per line."""
+    """
+    Line-delimited JSON formatter (JSONL). One log record per line.
+    """
 
     def format(self, record: logging.LogRecord) -> str:
         depth = log_depth.get()
@@ -62,7 +69,9 @@ class JsonlFormatter(logging.Formatter):
             exc_text = self.formatException(record.exc_info)
 
         row = JsonLogRow(
-            timestamp=datetime.fromtimestamp(record.created, tz=UTC).isoformat(),
+            timestamp=datetime.fromtimestamp(
+                record.created, tz=UTC
+            ).isoformat(),
             level=record.levelname,
             indent_level=depth,
             logger=record.name,

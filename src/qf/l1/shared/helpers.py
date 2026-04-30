@@ -33,7 +33,9 @@ def optional_int(config: dict[str, Any], key: str) -> int | None:
 QueryMapping = Mapping[str, str]
 
 
-def optional_query(config: dict[str, Any], key: str = "query") -> QueryMapping | None:
+def optional_query(
+    config: dict[str, Any], key: str = "query"
+) -> QueryMapping | None:
     raw = config.get(key)
     if raw is None:
         return None
@@ -45,7 +47,9 @@ def optional_query(config: dict[str, Any], key: str = "query") -> QueryMapping |
 
     for k, v in raw_dict.items():
         if not isinstance(v, str | int | float | bool):
-            raise ValueError(f"Invalid query param '{k}': must be simple scalar.")
+            raise ValueError(
+                f"Invalid query param '{k}': must be simple scalar."
+            )
         query[k] = str(v)
 
     return query

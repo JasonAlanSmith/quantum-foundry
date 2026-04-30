@@ -5,22 +5,22 @@ import random
 from pathlib import Path
 from typing import Any
 
-from data_farm.l1_application.commands.project_command import ProjectCommand
-from data_farm.l1_application.context import AppContext
-from data_farm.l1_application.use_cases.project_use_case import run_project
-from data_farm.l2_interface_adapters.config.default_data_source_config_loader import (
+from qf.l1.commands.project_command import ProjectCommand
+from qf.l1.context import AppContext
+from qf.l1.use_cases.project_use_case import run_project
+from qf.l2.config.default_data_source_config_loader import (
     DefaultDataSourceConfigLoader,
 )
-from data_farm.l2_interface_adapters.factories.default_inspector_factory import (
+from qf.l2.factories.default_inspector_factory import (
     DefaultInspectorFactory,
 )
-from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source_factory import (
+from qf.l2.patterns.filesystem_pattern_source_factory import (
     FilesystemPatternSourceFactory,
 )
-from data_farm.l2_interface_adapters.project.default_project_initializer import (
+from qf.l2.project.default_project_initializer import (
     DefaultProjectInitializer,
 )
-from data_farm.l2_interface_adapters.project.default_project_settings_store import (
+from qf.l2.project.default_project_settings_store import (
     DefaultProjectSettingsStore,
 )
 
@@ -62,7 +62,7 @@ def test_run_project_init_creates_structure(tmp_path: Path) -> None:
     assert (proj_dir / "data_source_config.toml").is_file()
 
 
-def test_run_project_projects_root_writes_projects_root_when_cmd_projects_root_set(
+def test_projects_root_writes_projects_root_when_cmd_projects_root_set(
     tmp_path: Path,
 ) -> None:
     app_config_path = tmp_path / "app.toml"
@@ -70,7 +70,9 @@ def test_run_project_projects_root_writes_projects_root_when_cmd_projects_root_s
     saved: dict[str, Any] = {}
 
     class FakeProjectSettingsStore(DefaultProjectSettingsStore):
-        def set_projects_root(self, config_path: Path, projects_root: str) -> None:
+        def set_projects_root(
+            self, config_path: Path, projects_root: str
+        ) -> None:
             saved.clear()
             saved.update({"project": {"projects_root": projects_root}})
 
@@ -96,10 +98,12 @@ def test_run_project_projects_root_writes_projects_root_when_cmd_projects_root_s
 
     run_project(ctx, cmd)
 
-    assert saved["project"]["projects_root"] == str(tmp_path / "projects")
+    assert saved["project"]["projects_root"] == str(
+        tmp_path / "projects"
+    )
 
 
-def test_run_project_projects_root_preserves_existing_config_keys_when_writing_projects_root(
+def test_projects_root_preserves_existing_config_keys_when_writing(
     tmp_path: Path,
 ) -> None:
     app_config_path = tmp_path / "app.toml"
@@ -110,9 +114,13 @@ def test_run_project_projects_root_preserves_existing_config_keys_when_writing_p
     }
 
     class FakeProjectSettingsStore(DefaultProjectSettingsStore):
-        def set_projects_root(self, config_path: Path, projects_root: str) -> None:
+        def set_projects_root(
+            self, config_path: Path, projects_root: str
+        ) -> None:
             current = copy.deepcopy(saved)
-            current.setdefault("project", {})["projects_root"] = projects_root
+            current.setdefault("project", {})[
+                "projects_root"
+            ] = projects_root
             saved.clear()
             saved.update(current)
 
@@ -140,4 +148,6 @@ def test_run_project_projects_root_preserves_existing_config_keys_when_writing_p
 
     assert saved["test"] == "not removed"
     assert saved["project"]["test"] == "not removed"
-    assert saved["project"]["projects_root"] == str(tmp_path / "projects")
+    assert saved["project"]["projects_root"] == str(
+        tmp_path / "projects"
+    )

@@ -2,10 +2,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source import FilesystemPatternSource
+from qf.l2.patterns.filesystem_pattern_source import (
+    FilesystemPatternSource,
+)
 
 
-def test_pattern_registry_strips_bom_and_whitespace(tmp_path: Path) -> None:
+def test_pattern_registry_strips_bom_and_whitespace(
+    tmp_path: Path,
+) -> None:
     d = tmp_path / "patterns"
     d.mkdir()
     # UTF-8 BOM + spaces + CRLF
